@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-playground-service
+  namespace: playground
+  labels:
+    app: aks-playground
+spec:
+  type: LoadBalancer
+  selector:
+    app: aks-playground
+  ports:
+  - port: 80

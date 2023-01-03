@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aks-playground-deployment
+  namespace: playground
+  labels:
+    app: aks-playground
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aks-playground
+  template:
+    metadata:
+      labels:
+        app: aks-playground
+    spec:
+      containers:
+      - name: aks-playground
+        image: aksplaygroundarc01.azurecr.io/aks-playground:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

@@ -2,11 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aks-playground-deployment
-  namespace: playground
   labels:
     app: aks-playground
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: aks-playground
@@ -16,11 +15,31 @@ spec:
         app: aks-playground
     spec:
       containers:
-      - name: aks-playground
-        image: aksplaygroundarc01.azurecr.io/aks-playground:v1
+      - name: sampleapp
+        image: docker.io/bbachin1/sample-aks-image
+        # volumeMounts:
+        #   - mountPath: "/usr/share/nginx/html"
+        #     name: task-pv-storage
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
         - containerPort: 80
+      # volumes:
+      #   - name: task-pv-storage
+      #     persistentVolumeClaim:
+      #       claimName: aks-playground
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-playground-service
+  labels:
+    app: aks-playground
+spec:
+  type: LoadBalancer
+  selector:
+    app: aks-playground
+  ports:
+  - port: 80
